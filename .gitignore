@@ -1,0 +1,18 @@
+# Ignorar entornos virtuales
+venv/
+.env
+
+# Ignorar cachés de Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Ignorar archivos de logs
+*.log
+
+# Ignorar capturas temporales
+*.png
+*.jpg
+
+# Ignorar archivos de salida
+output.txt
