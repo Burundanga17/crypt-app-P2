@@ -12,4 +12,4 @@ COPY crypto_info_3.0.py .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Comando por defecto al ejecutar el contenedor
-CMD ["python", "crypto_info_3.0.py", "bitcoin", "clp", "7"]
+CMD ["python", "crypto_info_3.0.py"]
