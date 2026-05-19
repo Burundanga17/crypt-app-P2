@@ -26,9 +26,9 @@ pipeline {
             steps {
                 powershell '''
                     # Normalizar parámetros: quitar BOM, saltos de línea y espacios invisibles
-                    $cripto = "${env:CRIPTO}" -replace '[\\uFEFF\\r\\n]', '' -replace '\\s+$',''
-                    $moneda = "${env:MONEDA}" -replace '[\\uFEFF\\r\\n]', '' -replace '\\s+$',''
-                    $dias   = "${env:DIAS}"   -replace '[\\uFEFF\\r\\n]', '' -replace '[^0-9]', ''
+                    $cripto = "${env:CRIPTO}" -replace '[\\uFEFF]', '' -replace '[\\r\\n]', '' -replace '\\s+$',''
+                    $moneda = "${env:MONEDA}" -replace '[\\uFEFF]', '' -replace '[\\r\\n]', '' -replace '\\s+$',''
+                    $dias   = "${env:DIAS}"   -replace '[\\uFEFF]', '' -replace '[\\r\\n]', '' -replace '[^0-9]', ''
 
                     # Crear archivo limpio con los parámetros
                     Set-Content -Path respuestas.txt -Value $cripto
@@ -43,3 +43,4 @@ pipeline {
         }
     }
 }
+
