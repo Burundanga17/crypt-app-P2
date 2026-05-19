@@ -2,9 +2,9 @@ pipeline {
     agent any
 
     parameters {
-        string(name: 'CRIPTO', defaultValue: 'bitcoin', description: 'Nombre de la criptomoneda')
-        string(name: 'MONEDA', defaultValue: 'usd', description: 'Moneda de referencia')
-        string(name: 'DIAS', defaultValue: '7', description: 'Cantidad de días para el gráfico')
+        choice(name: 'CRIPTO', choices: ['bitcoin', 'ethereum', 'dogecoin'], description: 'Selecciona la criptomoneda')
+        choice(name: 'MONEDA', choices: ['usd', 'eur', 'clp'], description: 'Selecciona la moneda de referencia')
+        choice(name: 'DIAS', choices: ['7', '30', '90'], description: 'Cantidad de días para el gráfico')
     }
 
     stages {
@@ -22,20 +22,18 @@ pipeline {
             }
         }
 
-        stage('Ejecutar contenedor con archivo de respuestas robusto') {
+        stage('Ejecutar contenedor con parámetros seguros') {
             steps {
                 powershell '''
-                    # Normalizar parámetros: quitar BOM, saltos de línea y espacios invisibles
-                    $cripto = "${env:CRIPTO}" -replace '[\\uFEFF]', '' -replace '[\\r\\n]', '' -replace '\\s+$',''
-                    $moneda = "${env:MONEDA}" -replace '[\\uFEFF]', '' -replace '[\\r\\n]', '' -replace '\\s+$',''
-                    $dias   = "${env:DIAS}"   -replace '[\\uFEFF]', '' -replace '[\\r\\n]', '' -replace '[^0-9]', ''
+                    # Como vienen de choice, no hay BOM ni \r
+                    $cripto = "${env:CRIPTO}"
+                    $moneda = "${env:MONEDA}"
+                    $dias   = "${env:DIAS}"
 
-                    # Crear archivo limpio con los parámetros
                     Set-Content -Path respuestas.txt -Value $cripto
                     Add-Content -Path respuestas.txt -Value $moneda
                     Add-Content -Path respuestas.txt -Value $dias
 
-                    # Ejecutar contenedor leyendo el archivo
                     docker rm -f crypto_app_container 2>$null
                     Get-Content respuestas.txt | docker run --name crypto_app_container --rm -i crypto_app
                 '''
@@ -43,4 +41,3 @@ pipeline {
         }
     }
 }
-
