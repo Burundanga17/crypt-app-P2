@@ -1,12 +1,6 @@
 pipeline {
     agent any
 
-    environment {
-        CRIPTO = "bitcoin"
-        MONEDA = "usd"
-        DIAS   = "10"
-    }
-
     stages {
         stage('Clonar repositorio') {
             steps {
@@ -22,16 +16,15 @@ pipeline {
             }
         }
 
-        stage('Ejecutar contenedor y mostrar salida') {
+        stage('Ejecutar contenedor') {
             steps {
                 script {
                     // Elimina contenedor previo si existe
                     sh 'docker rm -f crypto_app_container || echo "No existe contenedor previo"'
-                    // Ejecuta en primer plano con variables de entorno
-                    sh 'docker run --name crypto_app_container --rm -e CRIPTO=$CRIPTO -e MONEDA=$MONEDA -e DIAS=$DIAS crypto_app'
+                    // Ejecuta en modo detached
+                    sh 'docker run --name crypto_app_container -d crypto_app'
                 }
             }
         }
     }
 }
-
