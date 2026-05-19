@@ -2,9 +2,9 @@ pipeline {
     agent any
 
     parameters {
-        string(name: 'CRIPTO', defaultValue: 'bitcoin', description: 'Nombre de la criptomoneda (ej: bitcoin, ethereum)')
-        string(name: 'MONEDA', defaultValue: 'usd', description: 'Moneda de referencia (ej: usd, eur, clp)')
-        string(name: 'DIAS', defaultValue: '7', description: 'Cantidad de días para el gráfico (ej: 7, 30, 90)')
+        string(name: 'CRIPTO', defaultValue: 'bitcoin', description: 'Nombre de la criptomoneda')
+        string(name: 'MONEDA', defaultValue: 'usd', description: 'Moneda de referencia')
+        string(name: 'DIAS', defaultValue: '7', description: 'Cantidad de días para el gráfico')
     }
 
     stages {
@@ -17,7 +17,9 @@ pipeline {
         stage('Construir imagen Docker') {
             steps {
                 script {
-                    sh 'docker build -t crypto_app .'
+                    powershell '''
+                        docker build -t crypto_app .
+                    '''
                 }
             }
         }
@@ -25,14 +27,12 @@ pipeline {
         stage('Ejecutar contenedor con entradas simuladas') {
             steps {
                 script {
-                    // Elimina contenedor previo si existe
-                    sh 'docker rm -f crypto_app_container || echo "No existe contenedor previo"'
-                    
-                    // 🔹 Usamos PowerShell-style newlines para simular input()
-                    sh "\"${params.CRIPTO}`n${params.MONEDA}`n${params.DIAS}\" | docker run --name crypto_app_container --rm -i crypto_app"
+                    powershell """
+                        docker rm -f crypto_app_container 2>$null
+                        \\"${params.CRIPTO}\`n${params.MONEDA}\`n${params.DIAS}\\" | docker run --name crypto_app_container --rm -i crypto_app
+                    """
                 }
             }
         }
     }
 }
-
