@@ -22,16 +22,22 @@ pipeline {
             }
         }
 
-        stage('Ejecutar contenedor con parámetros limpios') {
+        stage('Ejecutar contenedor con archivo de respuestas robusto') {
             steps {
                 powershell '''
-                    # Normalizar parámetros: quitar espacios, saltos de línea y BOM
+                    # Normalizar parámetros: quitar BOM, espacios y saltos de línea
                     $cripto = "${env:CRIPTO}".Trim() -replace '[^a-zA-Z0-9-]', ''
                     $moneda = "${env:MONEDA}".Trim() -replace '[^a-zA-Z0-9-]', ''
                     $dias   = "${env:DIAS}".Trim() -replace '[^0-9]', ''
 
+                    # Crear archivo limpio con los parámetros
+                    Set-Content -Path respuestas.txt -Value $cripto
+                    Add-Content -Path respuestas.txt -Value $moneda
+                    Add-Content -Path respuestas.txt -Value $dias
+
+                    # Ejecutar contenedor leyendo el archivo
                     docker rm -f crypto_app_container 2>$null
-                    "$cripto`n$moneda`n$dias" | docker run --name crypto_app_container --rm -i crypto_app
+                    Get-Content respuestas.txt | docker run --name crypto_app_container --rm -i crypto_app
                 '''
             }
         }
