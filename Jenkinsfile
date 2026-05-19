@@ -16,13 +16,17 @@ pipeline {
             }
         }
 
-        stage('Ejecutar contenedor') {
+        stage('Ejecutar contenedor con entradas simuladas') {
             steps {
                 script {
                     // Elimina contenedor previo si existe
                     sh 'docker rm -f crypto_app_container || echo "No existe contenedor previo"'
-                    // Ejecuta en modo detached
-                    sh 'docker run --name crypto_app_container -d crypto_app'
+                    
+                    // 🔹 Aquí usamos echo para simular los 3 input()
+                    // Primera línea: cripto
+                    // Segunda línea: moneda
+                    // Tercera línea: días
+                    sh '(echo bitcoin && echo usd && echo 7) | docker run --name crypto_app_container --rm -i crypto_app'
                 }
             }
         }
