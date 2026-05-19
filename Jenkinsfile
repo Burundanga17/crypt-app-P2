@@ -25,10 +25,10 @@ pipeline {
         stage('Ejecutar contenedor con archivo de respuestas robusto') {
             steps {
                 powershell '''
-                    # Normalizar parámetros: quitar BOM, espacios y saltos de línea
-                    $cripto = "${env:CRIPTO}".Trim() -replace '[^a-zA-Z0-9-]', ''
-                    $moneda = "${env:MONEDA}".Trim() -replace '[^a-zA-Z0-9-]', ''
-                    $dias   = "${env:DIAS}".Trim() -replace '[^0-9]', ''
+                    # Normalizar parámetros: quitar BOM, saltos de línea y espacios invisibles
+                    $cripto = "${env:CRIPTO}" -replace '[\\uFEFF\\r\\n]', '' -replace '\\s+$',''
+                    $moneda = "${env:MONEDA}" -replace '[\\uFEFF\\r\\n]', '' -replace '\\s+$',''
+                    $dias   = "${env:DIAS}"   -replace '[\\uFEFF\\r\\n]', '' -replace '[^0-9]', ''
 
                     # Crear archivo limpio con los parámetros
                     Set-Content -Path respuestas.txt -Value $cripto
