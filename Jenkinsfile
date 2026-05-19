@@ -21,8 +21,8 @@ pipeline {
                 script {
                     // Elimina contenedor previo si existe
                     sh 'docker rm -f crypto_app_container || echo "No existe contenedor previo"'
-                    // Ejecuta en modo detached
-                    sh 'docker run --name crypto_app_container -d crypto_app'
+                    // Ejecuta en primer plano para que Jenkins muestre la salida
+                    sh 'docker run --name crypto_app_container --rm crypto_app'
                 }
             }
         }
