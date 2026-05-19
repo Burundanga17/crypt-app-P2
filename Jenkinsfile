@@ -22,14 +22,17 @@ pipeline {
             }
         }
 
-        stage('Ejecutar contenedor con entradas simuladas') {
+        stage('Ejecutar contenedor con Trim') {
             steps {
                 powershell '''
+                    $cripto = "${env:CRIPTO}".Trim()
+                    $moneda = "${env:MONEDA}".Trim()
+                    $dias   = "${env:DIAS}".Trim()
+
                     docker rm -f crypto_app_container 2>$null
-                    "${env:CRIPTO}`n${env:MONEDA}`n${env:DIAS}" | docker run --name crypto_app_container --rm -i crypto_app
+                    "$cripto`n$moneda`n$dias" | docker run --name crypto_app_container --rm -i crypto_app
                 '''
             }
         }
     }
 }
-
