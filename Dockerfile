@@ -6,10 +6,10 @@ WORKDIR /app
 
 # Copiar archivos del proyecto al contenedor
 COPY requirements.txt .
-COPY crypto_info_3.0.py .
+COPY app.py .
 
 # Instalar dependencias
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Comando por defecto al ejecutar el contenedor
-CMD ["python", "crypto_info_3.0.py"]
+CMD ["python", "app.py"]
