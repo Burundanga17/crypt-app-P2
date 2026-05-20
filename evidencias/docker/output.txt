@@ -1,0 +1,15 @@
+CONTAINER ID   IMAGE        COMMAND           CREATED         STATUS                     PORTS     NAMES
+c19a1758fcdc   crypto_app   "python app.py"   4 minutes ago   Exited (0) 4 minutes ago             samplerunning
+
+🔍 Consultando datos de 'bitcoin' en 'USD'...
+
+==================================================
+  📊 Informe de Criptomoneda: Bitcoin (BTC)
+==================================================
+  💰 Precio actual:            76720 USD
+  📈 Máximo 24h:               77199 USD
+  📉 Mínimo 24h:               76182 USD
+  🔄 Cambio últimas 24h:       0.00074%
+  🏦 Capitalización de mercado: 1536916227873 USD
+  📦 Volumen total:             27661453818 USD
+==================================================
