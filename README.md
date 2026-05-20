@@ -114,8 +114,8 @@ crypt-app-P2/
 node {
   stage('Preparation') {
     catchError(buildResult: 'SUCCESS') {
-      sh 'docker stop samplerunning'
-      sh 'docker rm samplerunning'
+      bat 'docker stop samplerunning'
+      bat 'docker rm samplerunning'
     }
   }
   stage('Build') {
